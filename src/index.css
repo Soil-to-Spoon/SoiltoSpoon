@@ -5,3 +5,10 @@
 /* Import slick carousel styles in your CSS file or main entry file */
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
+
+@layer utilities {
+    .drop-shadow {
+        filter:drop-shadow(-6px 8px 15px rgba(0, 0, 0, 0.2));
+    }
+
+}

@@ -1,54 +1,89 @@
 // src/components/Hero.js
-import React from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Oranges from '../assets/images/oranges1.png';
+import RedTomato from '../assets/images/RedTomato.png';
+import CoconutTable from '../assets/images/coconut-table.png';
+import { motion } from "framer-motion";
+import {FadeRight} from '../utility/animation';
 
-import Plants from '../assets/images/plants.jpg';
-import Winery from '../assets/images/winery.jpg';
-import Products from '../components/Products';
+
+
+const images = [Oranges, CoconutTable, RedTomato];
 
 const Hero = () => {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
-    };
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    const images = [
-        Winery,
-        Plants,
-    ];
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+        }, 3000); // Change image every 3 seconds
+
+        return () => clearInterval(interval);
+    }, []);
 
     return (
-        <>
-            <div className="hero relative w-full">
-                <Slider {...settings}>
-                    {images.map((image, index) => (
-                        <div key={index} className="relative">
-                            <img src={image} alt={`Slide ${index}`} className="w-full h-screen object-cover" />
-                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white text-center">
-                                <h1 data-aos="fade-up" className="text-4xl md:text-6xl font-bold mb-4 ">Welcome to Soil and Spoon</h1>
-                                <p data-aos="fade-up" className="text-lg md:text-2xl">Connecting farmers directly to buyers</p>
-                                <div className="flex space-x-2 mt-7">
-                                    <button className="text-white bg-[#5D8C55] pt-2 py-2 px-3 rounded-lg border-2 border-[#5D8C55]">
-                                        Our Services
-                                    </button>
-                                    <button className="text-[#5D8C55] bg-[#ECDC67] pt-2 py-2 px-3 rounded-lg border-2 border-[#ECDC67]">
-                                        Contact Us
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </Slider>
+        <section>
+            <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 min-h-[650px] items-center">
+                {/* Text Content */}
+                <div className="flex flex-col justify-center py-14 px-32 md:py-0 relative z-10">
+                    <div className="text-center md:text-left space-y-4 lg:max-w-[400px] mx-auto md:mx-0">
+                        <motion.h1
+                            variants={FadeRight(0.6)}
+                            initial="hidden"
+                            animate="visible"
+                            className="text-5xl lg:text-6xl font-bold text-primary leading-relaxed xl:leading-loose "
+                        >
+                            Soil to Spoon
+                        </motion.h1>
+                        <motion.p
+                            variants={FadeRight(0.9)}
+                            initial="hidden"
+                            animate="visible"
+                            className="text-2xl lg:text-3xl font-bold text-secondary tracking-wide"
+                        >
+                            Order Now for Farm Fresh Produce
+                        </motion.p>
+                        <motion.p
+                            variants={FadeRight(1.2)}
+                            initial="hidden"
+                            animate="visible"
+                            className="text-[#141B25]"
+                        >
+                            We are dedicated to connecting farmers directly with consumers, ensuring fresh and high-quality produce reaches your table without the middlemen. We empower local farmers by giving them a platform to sell their products directly to buyers, resulting in fair prices and sustainable agriculture practices.
+                        </motion.p>
+                        <motion.div
+                            variants={FadeRight(1.5)}
+                            initial="hidden"
+                            animate="visible"
+                            className="flex justify-center md:justify-start"
+                        >
+                            <Link to="/shop">
+                            <button
+                                className="bg-primary text-white font-semibold py-3 px-6 rounded-xl shadow-[0px_10px_14px_-7px_#16a34a] hover:!scale-110 duration-300 flex items-center gap-2"
+                            >
+                                Shop Now
+                            </button>
+                            </Link>
+                        </motion.div>
+                    </div>
+                </div>
+
+                {/* Image Content */}
+                <div className="flex justify-center md:justify-end items-center mt-10 md:mt-0">
+                    <motion.img
+                        key={currentImageIndex}
+                        initial={{ opacity: 0, rotate: 0 }}
+                        animate={{ opacity: 1, rotate: 360 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 2, ease: "easeInOut" }}
+                        src={images[currentImageIndex]}
+                        alt="Rotating product"
+                        className="w-[350px] md:w-[550px] rounded-lg drop-shadow"
+                    />
+                </div>
             </div>
-            <Products />
-        </>
+        </section>
     );
 };
 
